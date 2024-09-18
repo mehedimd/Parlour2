@@ -1,0 +1,100 @@
+﻿@model Domain.ViewModel.EmpLeaveApplication.EmpLeaveApplicationVm
+@using Domain.Enums.AppEnums
+@{
+    ViewData["Title"] = "Employee Leave Edit";
+}
+
+<div class="row">
+    <div class="col-sm-12 default-according">
+        <div class="card">
+            <div class="card-header p-4">
+                <h5>Employee Leave Application Modify</h5>
+                <div class="setting-list">
+                    <a asp-action="Search" asp-controller="EmpLeaveApplication" class="btn btn-primary">Search Employee Leave Application</a>
+                </div>
+            </div>
+            <form asp-action="Edit" class="form theme-form" method="post" data-parsley-validate enctype="multipart/form-data">
+                @Html.HiddenFor(c=>c.Id)
+                @Html.HiddenFor(c=>c.Status)
+                @Html.HiddenFor(c=>c.FileDoc)
+                @Html.HiddenFor(c=>c.SubmitById)
+                @Html.HiddenFor(c=>c.SubmitDate)
+                @Html.HiddenFor(c=>c.ActionById)
+                @Html.HiddenFor(c=>c.ActionDate)
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-form-label">Employee</label>
+                            <select asp-for="EmployeeId" asp-items="Model.EmployeeLookUp" class="dd-type"></select>
+                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="col-form-label">Leave Type</label>
+                            <select asp-for="LeaveTypeId" asp-items="Model.LeaveTypeLookUp" class="dd-type"></select>
+                            <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-form-label">From Date *</label>
+                            <input class="datepickerStart form-control" asp-for="FromDateStr" type="text" data-language="en">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="col-form-label">To Date *</label>
+                            <input class="datepickerEnd form-control" asp-for="ToDateStr" type="text" data-language="en">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-form-label">Reason *</label>
+                            <textarea class="form-control" asp-for="Reason" rows="3"></textarea>
+                            <span asp-validation-for="Reason" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label">Length</label>
+                            <input class="form-control" type="number" asp-for="Length" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <div class="col-sm-9 offset-sm-3">
+                        <button class="btn btn-primary" type="submit">Update</button>
+                        <input class="btn btn-light" type="reset" value="Clear">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var startDate = @Model.FromDateStr;
+        var endDate = @Model.ToDateStr;
+
+        $(".datepickerStart").datepicker({
+            setDate: startDate,
+            dateFormat: 'dd/mm/yyyy',
+        });
+        $(".datepickerEnd").datepicker({
+            setDate: endDate,
+            dateFormat: 'dd/mm/yyyy',
+            onSelect: function (d, i) {
+                calculateLength();
+            }
+        });
+
+        function calculateLength() {
+            const startDate = $("#FromDateStr").val();
+            const endDate = $("#ToDateStr").val();
+
+            if (!hasAnyError(startDate) && !hasAnyError(endDate)) {
+                const result = getDayDiffBetweenTwoDates(startDate, endDate);
+                $("#Length").val(result);
+            }
+        }
+    </script>
+}

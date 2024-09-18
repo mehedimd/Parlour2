@@ -1,0 +1,74 @@
+﻿@model Domain.ViewModel.EmpLeaveApplication.EmpLeaveBalanceReportVm
+@{
+    ViewData["Title"] = "EmpLeaveStatement";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-sm-12 default-according">
+        <form>
+            <div class="card">
+                <div class="card-header p-4">
+                    <h5>Employee Leave Statement</h5>
+                    <div class="setting-list">
+                        <button class="btn btn-primary" type="button" id="EmpLeaveStatementBtn">Search</button>
+                    </div>
+                </div>
+                <div class="card-body table-responsive">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Employee</label>
+                                        <select asp-for="EmployeeId" asp-items="Model.EmployeeLookUp" class="dd-type"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Year</label>
+                                        <select asp-for="SelectYear" asp-items="Model.YearLookUp" class="dd-type"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="LeaveStatementSec">
+                <div class="card-header p-4">
+                    <h5 style="margin-bottom:10px;">Employee Leave Statement</h5>
+                    <div class="setting-list" id="printBtnSection">
+                        <button class="btn btn-primary" type="button" id="PrintBtn">PDF Print</button>
+                    </div>
+                    <div id="HeaderPart"></div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="" class="table table-bordered" style="width:100%; text-align: center">
+                            <thead class="bg-primary">
+                                <tr>
+                                    <th style="width: 5%">Sl</th>
+                                    <th>Leave Type</th>
+                                    <th>Current Year Balance</th>
+                                    <th>Carry Forward</th>
+                                    <th>Total</th>
+                                    <th>Taken</th>
+                                    <th>Remaining</th>
+                                </tr>
+                            </thead>
+                            <tbody id="LeaveStatementTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script src="~/js/ETL/EmpLeaveApp/EmpLeaveReport.js"></script>
+}

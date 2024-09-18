@@ -1,0 +1,360 @@
+﻿@model Domain.ViewModel.PrServicesBill.PrServicesBillVm
+@using Domain.Enums.AppEnums
+@{
+    ViewData["Title"] = "Bill Details";
+
+    var payableAmount = Model.NetAmount > Model.PaidAmount ? (Model.NetAmount - Model.PaidAmount) : 0;
+}
+
+<div class="row">
+    <div class="col-sm-12 default-according">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="card p-0">
+                        <div class="card-header">
+                            <h5 class="d-flex align-items-center">
+                                Bill Info -
+                                @if (Model.BillStatus == (short)BillStatusEnum.Pending)
+                                {
+                                    <span class="badge badge-pill badge-danger" style="font-size:12px;margin-left:10px;">Pending</span>
+                                }
+                                else if (Model.BillStatus == (short)BillStatusEnum.Partial)
+                                {
+                                    <span class="badge badge-pill badge-secondary" style="font-size:12px;margin-left:10px;">Partial Paid</span>
+                                }
+                                else if (Model.BillStatus == (short)BillStatusEnum.Full)
+                                {
+                                    <span class="badge badge-pill badge-success" style="font-size:12px;margin-left:10px;">Full Paid</span>
+                                }
+                            </h5>
+                            <div class="setting-list">
+                                <a class="btn btn-outline-primary" asp-controller="PrServicesBill" target="_blank" asp-action="ServiceBillPrint" asp-route-id="@Model.Id" type="submit">Print Bill</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td><b>Bill No</b></td>
+                                            <td>@(Model.ServiceNo)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Bill Date</b></td>
+                                            <td>@(Model.BookingDate?.ToString("dd/MM/yyyy"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Appointment Date</b></td>
+                                            <td>@(Model.ServiceDate.ToString("dd/MM/yyyy"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Shift</b></td>
+                                            <td>@(Model.ServiceShiftName)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Remarks</b></td>
+                                            <td>@(Model.BookingRemarks)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="card p-0">
+                        <div class="card-header">
+                            <h5>Customer Info</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td><b>Name</b></td>
+                                            <td>@(Model.CustomerName)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Mobile</b></td>
+                                            <td>@(Model.CustomerMobile)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Email</b></td>
+                                            <td>@(Model.CustomerEmail)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Address</b></td>
+                                            <td>@(Model.CustomerAddress)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="card p-0">
+                        <div class="card-header">
+                            <h5>Payment Info</h5>
+                            <div class="setting-list">
+                                @if (Model.BillStatus != (short)BillStatusEnum.Full)
+                                {
+                                    <a class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#paymentAddModal"> Add Payment </a>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Payment Date</th>
+                                            <th>Payment Method</th>
+                                            <th>Paid Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.PaymentList.Count > 0)
+                                        {
+                                            foreach (var payment in Model.PaymentList)
+                                            {
+                                                <tr>
+                                                    <td>@(payment.TranDate.ToString("dd/MM/yyyy"))</td>
+                                                    <td>@(payment.PayMode)</td>
+                                                    <td>@(payment.Amount)</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card p-0">
+                    <div class="card-header">
+                        <h5 class="d-flex align-items-center">
+                            Services -
+                            @if (Model.ServiceStatus == (short)ServiceStatusEnum.Booking)
+                            {
+                                <span class="badge badge-pill badge-secondary" style="font-size:12px;margin-left:10px;">Booking</span>
+                            }
+                            else if (Model.ServiceStatus == (short)ServiceStatusEnum.Appointment)
+                            {
+                                <span class="badge badge-pill badge-primary" style="font-size:12px;margin-left:10px;">Appointment</span>
+                            }
+                            else if (Model.ServiceStatus == (short)ServiceStatusEnum.Running)
+                            {
+                                <span class="badge badge-pill badge-info" style="font-size:12px;margin-left:10px;">Running</span>
+                            }
+                            else if (Model.ServiceStatus == (short)ServiceStatusEnum.Completed)
+                            {
+                                <span class="badge badge-pill badge-success" style="font-size:12px;margin-left:10px;">Completed</span>
+                            }
+                        </h5>
+                        <div class="setting-list">
+                            @if (Model.BillStatus != (short)BillStatusEnum.Full || Model.ServiceStatus != (short)ServiceStatusEnum.Completed)
+                            {
+                                <a class="btn btn-primary" href="#" data-bs-toggle="modal" data-bs-target="#serviceAddModal"> Add Service </a>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Service</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-center">Rate</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.PrServicesBillDetails.Count > 0)
+                                    {
+                                        foreach (var dtl in Model.PrServicesBillDetails)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @(dtl.ServiceName)
+                                                    @if (dtl.ServiceStatus == (short)ServiceTaskStatusEnum.Pending)
+                                                    {
+                                                        <span class="badge badge-pill badge-info" style="font-size:12px;margin-left:10px;">Pending</span>
+                                                    }
+                                                    else if (dtl.ServiceStatus == (short)ServiceTaskStatusEnum.Running)
+                                                    {
+                                                        <span class="badge badge-pill badge-secondary" style="font-size:12px;margin-left:10px;">Running</span>
+                                                    }
+                                                    else if (Model.ServiceStatus == (short)ServiceTaskStatusEnum.Completed)
+                                                    {
+                                                        <span class="badge badge-pill badge-success" style="font-size:12px;margin-left:10px;">Completed</span>
+                                                    }
+                                                </td>
+                                                <td class="text-center">@(dtl.Qty)</td>
+                                                <td class="text-center">@(dtl.Rate)</td>
+                                                <td class="text-end">@(dtl.Amount)</td>
+                                            </tr>
+                                        }
+
+                                        <tr>
+                                            <td colspan="3" class="text-end"><b>Total Price</b></td>
+                                            <td class="text-end">@(Model.TotalBill.ToString("N2"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><b>Vat</b></td>
+                                            <td class="text-end">@(Model.VAT.ToString("N2"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><b>Discount</b></td>
+                                            <td class="text-end">@(Model.Discount.ToString("N2"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><b>Net Amount</b></td>
+                                            <td class="text-end">@(Model.NetAmount.ToString("N2"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><b>Paid Amount</b></td>
+                                            <td class="text-end">@(Model.PaidAmount.ToString("N2"))</td>
+                                        </tr>
+
+                                        @if (payableAmount > 0)
+                                        {
+                                            <tr>
+                                                <td colspan="3" class="text-end"><b>Payable Amount</b></td>
+                                                <td class="text-end">@(payableAmount.ToString("N2"))</td>
+                                            </tr>
+                                        }
+
+                                        <tr>
+                                            <td colspan="3" class="text-end"><b>Payment Method</b></td>
+                                            <td class="text-end">@(Model.PayMode)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                @*modal*@
+
+                <div class="modal fade" id="serviceAddModal" tabindex="-1" role="dialog" aria-labelledby="serviceAddModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel2">Add New Service To Bill</h5>
+                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <input type="hidden" id="MPrServiceBillId" value="@Model.Id" />
+                                    <div class="mb-2">
+                                        <label class="col-form-label">Category</label>
+                                        <select id="MPrCategoryId" asp-items="Model.PrCategoryLookUp" class="dd-type"></select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="col-form-label">Service</label>
+                                        <select id="MPrServiceId" asp-items="Model.PrServiceLookUp" class="dd-type"></select>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="col-form-label">Quantity</label>
+                                        <input class="form-control" id="MQty" type="number" min="1">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="col-form-label">Rate</label>
+                                        <input class="form-control" id="MRate" type="text">
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="col-form-label">Amount</label>
+                                        <input class="form-control" id="MAmount" type="text">
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" id="ServiceAddBtn" type="button">Add</button>
+                                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                @*modal_end*@
+
+
+                @*payment_modal*@
+
+                <div class="modal fade" id="paymentAddModal" tabindex="-1" role="dialog" aria-labelledby="paymentAddModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel2">Entry New Payment</h5>
+                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <input type="hidden" id="P_ServiceBillId" value="@Model.Id" />
+
+                                    <div class="md-2">
+                                        <label class="col-form-label">Pay Date</label>
+                                        <input class="datepicker-paid-date form-control" name="PaidDateStr" asp-for="PaidDateStr" type="text" data-language="en">
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="col-form-label">Payment Method</label>
+                                        <select id="P_PayMode" asp-items="Model.PayModeLookUp" class="dd-type"></select>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="col-form-label">Amount</label>
+                                        <input class="form-control" id="P_Amount" type="text">
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label class="col-form-label">Remarks</label>
+                                        <input class="form-control" id="P_Remarks" type="text">
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" id="PaymentAddBtn" type="button">Add</button>
+                                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                @*modal_end*@
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        var paidDate = @Model.PaidDateStr;
+
+        $(".datepicker-paid-date").datepicker({
+            setDate: paidDate,
+            dateFormat: 'dd/mm/yyyy',
+            autoClose: true
+        });
+
+        $('.datepicker-paid-date').on('changeDate', function (event) {
+            $(this).datepicker('hide');
+        });
+    </script>
+    <script src="~/js/ETL/PrServicesBill/PrServicesBillDetails.js"></script>
+}

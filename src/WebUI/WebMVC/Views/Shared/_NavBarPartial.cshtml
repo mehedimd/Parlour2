@@ -1,0 +1,207 @@
+﻿@using WebMVC.Models.IdentityModels
+  @model System.Security.Principal.IIdentity
+@{
+    var userId = string.IsNullOrEmpty(Model.Id()) ? "#" : Model.Id();
+    var fullName = string.IsNullOrEmpty(Model.FullName()) ? "NotAuthorize" : Model.FullName();
+    //var imageUrl = string.IsNullOrEmpty(Model.ImageUrl()) ? "~/images/no-image.jpg" : Model.ImageUrl();
+    var roleName = string.IsNullOrEmpty(Model.RoleName()) ? "NotSet" : Model.RoleName();
+}
+
+<header class="main-nav">
+    <div class="sidebar-user text-center">
+        <a class="setting-primary" asp-action="ChangePassword" asp-controller="User" asp-route-id="@userId"><i data-feather="settings"></i></a>
+        <img class="img-90 rounded-circle" src="~/theme/assets/images/dashboard/1.png" alt="">
+        <a href="#">
+            <h6 class="mt-3 f-14 f-w-600">@(fullName)</h6>
+        </a>
+        <p class="mb-0 font-roboto">@(roleName)</p>
+    </div>
+    <nav>
+        <div class="main-navbar">
+            <div id="mainnav">
+                <ul class="nav-menu custom-scrollbar">
+                    <li class="back-btn">
+                        <div class="mobile-back text-end"><span>Back</span><i class="fa fa-angle-right ps-2" aria-hidden="true"></i></div>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="nav-link menu-title link-nav" asp-controller="Home" asp-action="Index"><i data-feather="home"></i><span>Dashboard</span></a>
+                    </li>
+
+                    <li class="dropdown">
+                        <a class="nav-link menu-title link-nav" asp-controller="PrServicesBill" asp-action="Create"><i data-feather="file-text"></i><span>Bill Generate</span></a>
+                    </li>
+
+
+                    @*---Parlour---*@
+                    @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.PrServicesBills.ListView))
+                    {
+                        <li class="dropdown">
+                            <a class="nav-link menu-title" href="javascript:void(0)">
+                                <i class="icofont icofont-woman-in-glasses" style="margin-right:14px; font-size:large;"></i><span>Parlour</span>
+                            </a>
+                            <ul class="nav-submenu menu-content" style="padding-left:0px">
+                                @if (Model.HasPermission(Permissions.SuperAdmin))
+                                {
+                                    <li><a asp-controller="PrServiceCategory" asp-action="Create"><i data-feather="target"></i>Service Category</a></li>
+                                }
+                                @if (Model.HasPermission(Permissions.SuperAdmin))
+                                {
+                                    <li><a asp-controller="PrServiceInfo" asp-action="Create"><i data-feather="target"></i>Service Infos</a></li>
+                                }
+                                @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.PrServicesBills.ListView))
+                                {
+                                    <li><a asp-controller="PrServicesBill" asp-action="Search"><i data-feather="target"></i>Bill List</a></li>
+                                }
+                                @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.PrServicesBills.ListView))
+                                {
+                                    <li><a asp-controller="PrCustomer" asp-action="Search"><i data-feather="target"></i>Customer</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @*---Admin---*@
+                    @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.Module.AdminModule))
+                    {
+                        <li class="dropdown">
+                            @*<a class="nav-link menu-title mr-2" href="javascript:void(0)"><i data-feather="settings"></i><span>Setup</span></a>*@
+                            <a class="nav-link menu-title" href="javascript:void(0)">
+                                <i class="icofont icofont-settings-alt" style="margin-right:14px; font-size:large;"></i><span>Setup</span>
+                            </a>
+                            <ul class="nav-submenu menu-content" style="padding-left:0px">
+                                @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.UserRoles.ListView))
+                                {
+                                    <li><a asp-controller="Role" asp-action="Search"><i data-feather="target"></i>Roles</a></li>
+                                }
+                                @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.Users.ListView))
+                                {
+                                    <li><a asp-controller="User" asp-action="Search"><i data-feather="target"></i>Users</a></li>
+                                }
+                                @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.Departments.ListView))
+                                {
+                                    <li><a asp-controller="Department" asp-action="Search"><i data-feather="target"></i>Department</a></li>
+
+                                }
+                                @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.Designations.ListView))
+                                {
+                                    <li><a asp-controller="Designation" asp-action="Search"><i data-feather="target"></i>Designation</a></li>
+
+                                }
+                                @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.HrSettings.DetailsView))
+                                {
+                                    <li><a asp-controller="HrSetting" asp-action="Details"><i data-feather="target"></i>Office Time Setup</a></li>
+
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @*---HR---*@
+                    @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.Employees.ListView))
+                    {
+                        <li class="mega-menu">
+                            <a class="nav-link menu-title" href="javascript:void(0)"><i data-feather="coffee"></i><span>HR</span></a>
+                            <div class="mega-menu-container menu-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col mega-box" id="sub-menu-custom">
+                                            @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.Employees.ListView))
+                                            {
+                                                <a asp-controller="Employee" asp-action="Search"><i data-feather="target"></i>Employee</a>
+                                            }
+                                            @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.EmpAttendances.Create))
+                                            {
+                                                <a asp-controller="EmpAttendance" asp-action="Create"><i data-feather="target"></i>Employee Attendance</a>
+                                            }
+                                            @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.EmpAttendances.Create))
+                                            {
+                                                <a asp-controller="EmpAttendance" asp-action="Import"><i data-feather="target"></i>Upload Attendance</a>
+                                            }
+                                            <div class="link-section">
+                                                <div class="submenu-title">
+                                                    <a><i data-feather="paperclip"></i>Reports</a>
+                                                </div>
+                                                <div class="submenu-content opensubmegamenu">
+                                                    <ul>
+                                                        @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.EmpAttendances.ReportView))
+                                                        {
+                                                            <li><a asp-controller="EmpAttendance" asp-action="MonthlyAttendanceReport"><i data-feather="target"></i>Monthly Report</a></li>
+                                                        }
+                                                        @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.EmpAttendances.ReportView))
+                                                        {
+                                                            <li><a asp-controller="EmpAttendance" asp-action="EmpDailyAttendanceReport"><i data-feather="target"></i>Daily Report</a></li>
+                                                        }
+                                                        @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.EmpAttendances.ReportView))
+                                                        {
+                                                            <li><a asp-controller="EmpAttendance" asp-action="DayWiseAttendanceReport"><i data-feather="target"></i>Day Wise Report</a></li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                    @*---Leave---*@
+                    @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.LeaveTypes.ListView))
+                    {
+                        <li class="mega-menu">
+                            <a class="nav-link menu-title" href="javascript:void(0)">
+                                <i class="icofont icofont-travelling" style="margin-right:14px; font-size:large;"></i><span>Leave</span>
+                            </a>
+                            <div class="mega-menu-container menu-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col mega-box" id="sub-menu-custom">
+                                            @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.LeaveTypes.ListView))
+                                            {
+                                                <a asp-controller="LeaveType" asp-action="Search"><i data-feather="target"></i>Leave Type</a>
+                                            }
+                                            @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.LeaveSetups.ListView))
+                                            {
+                                                <a asp-controller="LeaveSetup" asp-action="Search"><i data-feather="target"></i>Leave Setup</a>
+                                            }
+                                            @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.CfLeave.ListView))
+                                            {
+                                                <a asp-controller="LeaveCf" asp-action="Search"><i data-feather="target"></i>CF Leave</a>
+                                            }
+                                            @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.SetHolidays.ListView))
+                                            {
+                                                <a asp-controller="SetHoliday" asp-action="Search"><i data-feather="target"></i>Holiday</a>
+                                            }
+                                            @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.EmpLeaveApplications.ListView))
+                                            {
+                                                <a asp-controller="EmpLeaveApplication" asp-action="Search"><i data-feather="target"></i>Leave Application</a>
+                                            }
+                                            <div class="link-section">
+                                                <div class="submenu-title">
+                                                    <a><i data-feather="paperclip"></i>Reports</a>
+                                                </div>
+                                                <div class="submenu-content opensubmegamenu">
+                                                    <ul>
+                                                        @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.EmpLeaveApplications.ReportView))
+                                                        {
+                                                            <li><a asp-controller="EmpLeaveApplication" asp-action="LeaveReport"><i data-feather="target"></i>Leave Report</a></li>
+                                                        }
+                                                        @if (Model.HasPermission(Permissions.SuperAdmin, Permissions.EmpLeaveApplications.ReportView))
+                                                        {
+                                                            <li class="text-truncate"><a asp-controller="EmpLeaveApplication" asp-action="EmpLeaveStatement"><i data-feather="target"></i>Emp Leave Statement</a></li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

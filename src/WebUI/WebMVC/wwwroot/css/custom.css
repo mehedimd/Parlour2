@@ -1,0 +1,98 @@
+﻿#sub-menu-custom {
+    padding-right: 0px;
+}
+
+    #sub-menu-custom a {
+        font-weight: normal;
+        color: #717171;
+    }
+
+.default-according {
+    padding-bottom: 60px;
+}
+
+.dataTables_wrapper {
+    width: 99%;
+}
+
+.text-customize {
+    font-size: 36px;
+}
+
+.text-customize-p {
+    font-size: 18px;
+    font-weight: 700;
+    /*color: #e1160c;*/
+}
+
+.btn-custom-dashboard {
+    /*padding: 0 !important;*/
+    background-color: #00ADEF;
+    color: #fff;
+}
+
+    .btn-custom-dashboard:hover {
+        color: #fff;
+    }
+
+.fa-custom {
+    color: #00adef !important;
+}
+
+.card-height-max {
+    min-height: 200px !important;
+    max-height: 200px !important;
+}
+
+.card-height2-max {
+    min-height: 150px !important;
+    max-height: 150px !important;
+}
+
+.card-ultra-modern {
+    background-color: #00ADEF !important;
+}
+
+.text-color-modify {
+    color: #4cff00 !important;
+}
+
+.quick-box {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0px;
+    text-align: center;
+}
+
+    .quick-box b {
+        padding-top: 5px;
+    }
+
+    .quick-box:hover {
+        background-color: aliceblue;
+    }
+
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    --bs-table-accent-bg: none !important;
+}
+
+.pdf-div table th {
+    text-align: center;
+}
+
+/*.btn-primary {
+    background-color: rgb(0,173,239) !important;
+    border-color: rgb(0,173,239) !important;
+}
+
+    .btn-primary:hover {
+        background-color: rgb(0,173,239) !important;
+        border-color: rgb(0,173,239) !important;
+    }*/
+
+.p-4 {
+    padding: 16px !important;
+}

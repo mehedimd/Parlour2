@@ -1,0 +1,96 @@
+﻿@model Domain.ViewModel.PrServiceInfo.PrServiceInfoVm;
+@{
+    ViewData["Title"] = "Service Info";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header p-4">
+                <h4>Service List</h4>
+            </div>
+            <div class="setting-list">
+                <a onclick="ClearAllField()" class="btn btn-primary">Create New</a>
+            </div>
+            <div class="card-body">
+                <div class="table table-responsive">
+                    <table id="ServiceInfoSearchTable" class="display" style="width:100%; text-align: left">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th style="width: 5%">Serial</th>
+                                <th>Photo</th>
+                                <th>Service Name</th>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Rate</th>
+                                <th>Category</th>
+                                <th>Is Enable</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header pb-0">
+                <h5>New Service</h5>
+            </div>
+            <div class="card-body">
+                <form class="form-wizard" id="regForm">
+
+                    <input asp-for="Id" class="form-control" type="hidden">
+
+                    <div class="form-group">
+                        <label>Service Name</label>
+                        <input asp-for="ServiceName" class="form-control" type="text">
+                        <span class="text-danger" id="ServiceName-customError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Service Code</label>
+                        <input asp-for="ServiceCode" class="form-control" type="text">
+                        <span class="text-danger" id="ServiceCode-customError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea asp-for="Description" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Rate</label>
+                        <input asp-for="Rate" class="form-control" type="number">
+                        <span class="text-danger" id="Rate-customError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select class="form-control dd-type" asp-for="CategoryId" asp-items="Model.ServiceCategoryLookUp"></select>
+                        <span class="text-danger" id="CategoryId-customError"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="media">
+                            <label class="col-form-label m-r-10">Is Enable?</label>
+                            <div class="media-body icon-state">
+                                <label class="switch">
+                                    <input type="checkbox" asp-for="IsEnable"><span class="switch-state"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <button class="btn btn-warning btn-update" id="updateBtn" onclick="UpdateService()" type="button">Update</button>
+                        <button class="btn btn-primary btn-submit" id="saveBtn" type="button" onclick="CreateNew()">Submit</button>
+                        <button class="btn btn-danger" type="reset" onclick="ClearAllField()">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/js/ETL/PrServiceInfo/PrServiceInfoSearch.js"></script>
+
+}

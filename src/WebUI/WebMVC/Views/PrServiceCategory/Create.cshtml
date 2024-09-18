@@ -1,0 +1,81 @@
+﻿@model Domain.ViewModel.PrServiceCategory.PrServiceCategoryVm;
+@{
+    ViewData["Title"] = "Service Category";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header p-4">
+                <h4>Service Category List</h4>
+            </div>
+            <div class="setting-list">
+                <a class="btn btn-primary" onclick="ClearAllField()">Create New</a>
+            </div>
+            <div class="card-body">
+                <div class="table table-responsive">
+                    <table id="ServiceCategorySearchTable" class="display" style="width:100%; text-align: left">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th style="width: 5%">Serial</th>
+                                <th>Category Name</th>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Is Enable</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header pb-0">
+                <h5>New Service Category</h5>
+            </div>
+            <div class="card-body">
+                <form class="form-wizard" id="regForm">
+                    <input asp-for="Id" class="form-control" type="hidden">
+
+                    <div class="form-group">
+                        <label>Category Name</label>
+                        <input asp-for="CategoryName" class="form-control" type="text">
+                        <span class="text-danger" id="CategoryName-customError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Category Code</label>
+                        <input asp-for="CategoryCode" class="form-control" type="text">
+                        <span class="text-danger" id="CategoryCode-customError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea asp-for="Description" class="form-control"> </textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="media">
+                            <label class="col-form-label m-r-10">Is Enable?</label>
+                            <div class="media-body icon-state">
+                                <label class="switch">
+                                    <input type="checkbox" asp-for="IsEnable"><span class="switch-state"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <button class="btn btn-warning" id="updateBtn" onclick="UpdateServiceCategory()" type="button">Update</button>
+                        <button class="btn btn-primary" id="saveBtn" onclick="CreateNew()" type="button">Submit</button>
+                        <button class="btn btn-danger" type="reset" onclick="ClearAllField()">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/ETL/PrServiceCategory/PrServiceCategorySearch.js"></script>
+
+}

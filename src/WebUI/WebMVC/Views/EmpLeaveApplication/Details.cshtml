@@ -1,0 +1,86 @@
+﻿@model Domain.ViewModel.EmpLeaveApplication.EmpLeaveApplicationVm
+@using Domain.Utility;
+@using Domain.Enums.AppEnums;
+@{
+    ViewData["Title"] = "Leave Application Details";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 default-according">
+            <div class="card">
+                <div class="card-header p-4">
+                    <h5>Leave Application Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td rowspan="3" colspan="2" style="width:50%;">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <img class="img-80" src="@Model.EmpPhotoUrl" alt="">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <h5>@(Model.EmployeeName)</h5>
+                                                <p>@(Model.EmployeeCode)</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="2" class="text-center f-20 fontbold-700" style="width:50%;">@(Model.LeaveTypeName)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Leave Balance</b></td>
+                                    <td>@(Model.LeaveTypeBalance)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Leave Taken</b></td>
+                                    <td>@(Model.LeaveTaken)</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:15%;"><b>Leave Start Date</b></td>
+                                    <td style="width:30%;">@Utility.ConvertDateToStr(Model.FromDate)</td>
+                                    <td style="width:15%;"><b>Leave End Date</b></td>
+                                    <td style="width:30%;">@Utility.ConvertDateToStr(Model.ToDate)</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:15%;"><b>Submit Date</b></td>
+                                    <td style="width:30%;">@Utility.ConvertDateToStr(Model.SubmitDate)</td>
+                                    <td style="width:15%;"><b>Status</b></td>
+                                    <td style="width:30%;">@(Model.StatusText)</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:15%;"><b>Reason</b></td>
+                                    <td style="width:30%;">@(Model.Reason)</td>
+                                    <td style="width:15%;"><b>File</b></td>
+                                    <td style="width:30%;"><a href="@(Model.FileDoc)" title='Leave Application PDF' target="_blank"><i class="fa fa-file-pdf-o"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:15%;"><b>Review By</b></td>
+                                    <td style="width:30%;">@(Model.ReviewByName)</td>
+                                    <td style="width:15%;"><b>Review Date</b></td>
+                                    <td style="width:30%;">@Utility.ConvertDateToStr(Model.ReviewDate)</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:15%;"><b>Approve By</b></td>
+                                    <td style="width:30%;">@(Model.ApprovedByName)</td>
+                                    <td style="width:15%;"><b>Approve Date</b></td>
+                                    <td style="width:30%;">@Utility.ConvertDateToStr(Model.ApproveDate)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @if (Model.Status == (short)EmpLeaveAppStatusEnum.Approve)
+                {
+                    <div class="card-footer text-end">
+                        <div class="col-sm-9 offset-sm-3">
+                            <a asp-action="CancelLeave" asp-controller="EmpLeaveApplication" asp-route-id="@Model.Id" class="btn btn-danger">Cancel Leave</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

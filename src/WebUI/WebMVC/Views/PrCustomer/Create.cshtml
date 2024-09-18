@@ -1,0 +1,54 @@
+﻿@model Domain.ViewModel.PrCustomer.PrCustomerVm
+@{
+    ViewData["Title"] = "Customer Add";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-sm-12 default-according">
+        <div class="card">
+            <div class="card-header pb-4">
+                <h5>New Customer Add</h5>
+            </div>
+            <div class="setting-list">
+                <a asp-action="Search" asp-controller="PrCustomer" class="btn btn-primary">Back</a>
+            </div>
+            <div class="card-body">
+                <form class="f1" asp-action="Create" method="post">
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3 shadow px-3 py-4">
+                            <div class="form-group">
+                                <label>Branch</label>
+                                <select class="form-control dd-type" asp-for="BranchId" asp-items="Model.BranchListLookup"></select>
+                                <span asp-validation-for="BranchId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Customer Name</label>
+                                <input class="form-control" asp-for="CustomerName">
+                                <span asp-validation-for="CustomerName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Mobile</label>
+                                <input asp-for="Mobile" class="form-control" type="number">
+                                <span asp-validation-for="Mobile" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input asp-for="Email" class="form-control">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label"> Address</label>
+                                <textarea class="form-control" asp-for="Address" type="text"></textarea>
+                            </div>
+                            <div class="f1-buttons">
+                                <button class="btn btn-primary btn-submit" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

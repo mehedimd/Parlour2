@@ -1,0 +1,122 @@
+﻿@model Domain.ViewModel.EmpLeaveApplication.EmpLeaveApplicationVm
+@using Domain.Enums.AppEnums
+@{
+    ViewData["Title"] = "Employee Leave Entry";
+}
+
+<div class="row">
+    <div class="col-sm-12 default-according">
+        <div class="card">
+            <div class="card-header p-4">
+                <h5>Leave Application Entry</h5>
+                <div class="setting-list">
+                    <a asp-action="Search" asp-controller="EmpLeaveApplication" class="btn btn-primary">Search Leave Application</a>
+                </div>
+            </div>
+            <form asp-action="Create" class="form theme-form" method="post" data-parsley-validate enctype="multipart/form-data">
+
+                <div class="card-body">
+                    <div class="row">
+                        @if (Model.EmployeeId > 0)
+                        {
+                            <div class="col-md-6 d-flex">
+                                <input type="hidden" asp-for="EmployeeId" />
+                                @if (!string.IsNullOrEmpty(Model.EmpPhotoUrl))
+                                {
+                                    <img style="height: 200px; width: 180px" src="@Model.EmpPhotoUrl" alt="">
+                                }
+                                else
+                                {
+                                    <img style="height: 200px; width: 180px" src="~/images/no_avatar.jpg" alt="">
+                                }
+
+                                <div class="d-flex flex-column" style="margin:10px 30px">
+                                    <h4>@(Model.EmployeeName)</h4>
+                                    <b>@(Model.EmployeeCode)</b>
+                                    <b>@(Model.EmpDesignation)</b>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-6">
+                                <label class="col-form-label">Employee</label>
+                                <select asp-for="EmployeeId" asp-items="Model.EmployeeLookUp" class="dd-type"></select>
+                                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                            </div>
+                        }
+
+
+                        <div class="col-md-6">
+                            <label class="col-form-label">Leave Type</label>
+                            <select asp-for="LeaveTypeId" asp-items="Model.LeaveTypeLookUp" class="dd-type"></select>
+                            <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-form-label">From Date *</label>
+                            <input class="datepicker-here form-control" asp-for="FromDateStr" type="text" data-language="en">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="col-form-label">To Date *</label>
+                            <input class="datepicker-here form-control" asp-for="ToDateStr" type="text" data-language="en">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-form-label">Reason *</label>
+                            <textarea class="form-control" asp-for="Reason" rows="3"></textarea>
+                            <span asp-validation-for="Reason" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label">Length</label>
+                            <input class="form-control" type="number" asp-for="Length" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-form-label">Upload File</label>
+                            <input class="form-control" type="file" asp-for="LeaveFile">
+                            <span asp-validation-for="LeaveFile" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6" id="TableSec">
+                            <table class="table table-bordered">
+                                <tbody id="tBodySec">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <section id="date-section">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Taken Leaves</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="DateTbodySec">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+                <div class="card-footer text-end">
+                    <div class="col-sm-9 offset-sm-3">
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                        <input class="btn btn-light" type="reset" value="Clear">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/ETL/EmpLeaveApp/LeaveAppCreate.js"></script>
+}

@@ -1,0 +1,93 @@
+﻿@model Domain.ViewModel.PrServicesBill.PrServicesBillSearchVm
+@{
+    ViewData["Title"] = "Bill Search";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-sm-12 default-according">
+        <div class="card">
+            <div class="card-header p-4">
+                <h5>Advance Search</h5>
+                <div class="setting-list">
+                    <input class="btn btn-primary" type="button" id="BillSearchBtn" value="Search" />
+                </div>
+            </div>
+            <div class="card-body table-responsive">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Form Date</label>
+                                    <input class="form-control from_dt" asp-for="FormDateStr" type="text" placeholder="Enter start date" data-language="en" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>To Date</label>
+                                    <input asp-for="ToDateStr" class="form-control to_dt" placeholder="Enter end date" data-language="en" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Bill Status</label>
+                                    <select asp-for="BillStatus" asp-items="Model.BillStatusLookUp" class="form-control dd-type"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Service No.</label>
+                                    <input class="form-control" asp-for="ServiceNo" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Customer</label>
+                                    <select asp-for="CustomerId" asp-items="Model.CustomerLookUp" class="form-control dd-type"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Customer Mobile</label>
+                                    <input class="form-control" asp-for="CustomerMobile" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header p-4">
+                <h5>Bill List</h5>
+            </div>
+            <div class="card-body table-responsive">
+                <div class="row">
+                    <table id="PrBillSearchTable" class="display" style="width:100%; text-align: left">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">Serial</th>
+                                <th>Bill Info</th>
+                                <th>Customer</th>
+                                <th>Bill Amount</th>
+                                <th>Bill Status</th>
+                                <th>Service Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script src="~/js/ETL/PrServicesBill/PrServicesBillSearch.js"></script>
+}

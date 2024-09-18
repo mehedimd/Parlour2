@@ -1,0 +1,43 @@
+﻿@model Domain.ViewModel.PrCustomer.PrCustomerSearchVm
+
+@{
+    ViewData["Title"] = "Customer Search";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-sm-12 default-according">
+        <div class="card">
+            <div class="card-header p-4">
+                <h5>Customer List</h5>
+                <div class="setting-list">
+                    <a asp-action="Create" asp-controller="PrCustomer" class="btn btn-primary">Create New</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table table-responsive">
+                    <table id="CustomerSearchTable" class="display" style="width:100%; text-align: left">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th style="width: 5%">Sl</th>
+                                <th>Reg. No</th>
+                                <th>Customer Name</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Reg. Date</th>
+                                <th>Branch</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="~/js/etl/prcustomer/prcustomersearch.js"></script>
+}

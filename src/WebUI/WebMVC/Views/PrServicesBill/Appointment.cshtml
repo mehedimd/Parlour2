@@ -1,0 +1,270 @@
+﻿@model Domain.ViewModel.PrServicesBill.PrServicesBillVm
+@using Domain.Enums.AppEnums
+@{
+    ViewData["Title"] = "Service Bill";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .table-scroll {
+            position: relative;
+            width: 100%;
+            z-index: 1;
+            margin: auto;
+            overflow: auto;
+            height: 350px;
+        }
+
+            .table-scroll table {
+                width: 100%;
+                margin: auto;
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+
+        .table-wrap {
+            position: relative;
+        }
+
+        .table-scroll th,
+        .table-scroll td {
+            padding: 10px 10px;
+            border: 1px solid #808080;
+            background: #fff;
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        .table-scroll thead th {
+            background-color: lightseagreen;
+            color: #fff;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-sm-12 default-according">
+
+        <form asp-action="Create" class="form theme-form" id="ServiceBillForm">
+
+            <input type="hidden" asp-for="ServiceStatus" value="@((short)ServiceStatusEnum.Appointment)"/>
+
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Invoice No.</label>
+                                <input class="form-control" asp-for="ServiceNo" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Service Date</label>
+                                <input class="datepicker-service-date form-control" asp-for="ServiceDateStr" type="text" data-language="en">
+                            </div>
+                            <div class="col-md-3">
+                                <label>Shift</label>
+                                <select asp-for="ServiceShiftId" asp-items="Model.ShiftLookUp" class="dd-type"></select>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Remarks</label>
+                                <textarea class="form-control" rows="1" asp-for="BookingRemarks" type="text"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 p-0 mt-2">
+                    <div class="row m-0">
+                        <div class="card p-0">
+                            <div class="card-header">
+                                <div class="row">
+                                    <label class="col-sm-2 col-form-label">Category</label>
+                                    <div class="col-sm-6">
+                                        <select class="dd-type" asp-for="PrCategoryId" asp-items="Model.PrCategoryLookUp"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row" id="liasServiceId">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 p-0 mt-2">
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <input type="hidden" class="form-control" asp-for="CustomerId">
+
+                                        <div class="col-md-6">
+                                            <label>Customer Name</label>
+                                            <input class="form-control" asp-for="CustomerName">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Email</label>
+                                            <input class="form-control" asp-for="CustomerEmail">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Mobile *</label>
+                                            <input class="form-control" asp-for="CustomerMobile">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Address</label>
+                                            <input class="form-control" asp-for="CustomerAddress">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div id="table-scroll" class="table-scroll">
+                                        <table id="main-table" class="main-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:45%;">Service</th>
+                                                    <th class="text-center" style="width:10%;">Quantity</th>
+                                                    <th class="text-center" style="width:15%;">Rate</th>
+                                                    <th class="text-center" style="width:15%;">Amount</th>
+                                                    <th class="text-center" style="width:5%;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="serviceItemTableId">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row mb-2 align-items-center">
+                                                <div class="col-md-6 text-end"><b>Payment Method:</b></div>
+                                                <div class="col-md-6">
+                                                    <select asp-for="PayMode" asp-items="Model.PayModeLookUp" class="dd-type"></select>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2 align-items-center">
+                                                <div class="col-md-6 text-end"><b>Paid Amount:</b></div>
+                                                <div class="col-md-6">
+                                                    <input class="form-control text-end" type="number" asp-for="PaidAmount" value="0" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row mb-2 align-items-center">
+                                                <div class="col-md-6 text-end"><b>Total Amount:</b></div>
+                                                <div class="col-md-6">
+                                                    <input class="form-control text-end" type="number" asp-for="TotalBill" value="0" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2 align-items-center">
+                                                <div class="col-md-6 text-end"><b>VAT:</b></div>
+                                                <div class="col-md-6">
+                                                    <input class="form-control text-end" type="number" asp-for="VAT" value="0" />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2 align-items-center">
+                                                <div class="col-md-6 text-end"><b>TAX:</b></div>
+                                                <div class="col-md-6">
+                                                    <input class="form-control text-end" type="number" asp-for="Tax" value="0" />
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2 align-items-center">
+                                                <div class="col-md-6 text-end"><b>Discount:</b></div>
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-6 p-l-10">
+                                                            <div class="input-group input-group-sm mb-3">
+                                                                <input type="number" class="form-control" id="discount-percent">
+                                                                <div class="input-group-append">
+                                                                    <span class="input-group-text">%</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="number" asp-for="Discount" value="0" class="form-control text-end">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2 align-items-center">
+                                                <div class="col-md-6 text-end"><b>Net Total:</b></div>
+                                                <div class="col-md-6">
+                                                    <input class="form-control text-end" type="number" asp-for="NetAmount" value="0" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer">
+                                    <div class="offset-sm-9">
+                                        <button class="btn btn-primary" type="button" id="BillSubmitBtn">Submit</button>
+                                        <input class="btn btn-light" type="reset" value="Clear">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        var currentDate = @Model.ServiceDateStr;
+
+        $(".datepicker-service-date").datepicker({
+            setDate: currentDate,
+            dateFormat: 'dd/mm/yyyy',
+            autoClose: true
+        });
+
+        $('.datepicker-service-date').on('changeDate', function (event) {
+            $(this).datepicker('hide');
+        });
+
+
+    </script>
+    <script src="~/js/ETL/PrServicesBill/PrServicesBillCreate.js"></script>
+    @*<script src="~/js/ETL/BookingService/BookingService.js?v=@DateTime.UtcNow.Ticks"></script>*@
+}
